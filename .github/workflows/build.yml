@@ -1,1 +1,54 @@
+name: Build Smart Calendar Firmware
 
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install PlatformIO
+        run: pip install platformio
+
+      - name: Build Smart Calendar
+        run: pio run -e esp32dev
+
+      - name: Collect firmware files
+        run: |
+          mkdir -p firmware-release
+
+          cp .pio/build/esp32dev/bootloader.bin \
+             firmware-release/bootloader.bin
+
+          cp .pio/build/esp32dev/partitions.bin \
+             firmware-release/partitions.bin
+
+          cp .pio/build/esp32dev/firmware.bin \
+             firmware-release/firmware.bin
+
+          if [ -f ~/.platformio/packages/framework-arduinoespressif32/tools/partitions/boot_app0.bin ]; then
+            cp ~/.platformio/packages/framework-arduinoespressif32/tools/partitions/boot_app0.bin \
+               firmware-release/boot_app0.bin
+          fi
+
+          cp FLASH_OFFSETS.txt \
+             firmware-release/FLASH_OFFSETS.txt
+
+      - name: Upload compiled firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: SmartCalendar_CYD_Pro_v2_BIN
+          path: firmware-release/
