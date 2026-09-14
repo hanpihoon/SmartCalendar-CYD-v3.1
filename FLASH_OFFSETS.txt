@@ -1,0 +1,11 @@
+Smart Calendar Pro v2 - ESP32 flash layout
+
+esptool.spacehuhn.com -> Chip: ESP32
+
+0x1000   bootloader.bin
+0x8000   partitions.bin
+0xE000   boot_app0.bin   (if generated/required by your Arduino core build)
+0x10000  firmware.bin
+
+For the first flash, erase flash first if you are replacing unrelated firmware.
+After Smart Calendar Pro is installed once, future firmware.bin files can be uploaded from the device's local web Setup page (OTA).
