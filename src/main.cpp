@@ -139,7 +139,7 @@ void tftInit(){
   tftSPI.begin(TFT_SCLK,TFT_MISO,TFT_MOSI,TFT_CS); tftSPI.setFrequency(40000000);
   delay(50); tftCmd(0x01); delay(120); tftCmd(0x28);
   tftCmd(0x3A); tftData(0x55); // RGB565
-  tftCmd(0x36); tftData(0x48); // portrait upright, BGR
+  tftCmd(0x36); tftData(0x88); // portrait upright, BGR
   tftCmd(0x11); delay(120); tftCmd(0x29);
   ledcSetup(0,5000,8); ledcAttachPin(TFT_BL,0); setBacklight(cfg.brightness);
 }
